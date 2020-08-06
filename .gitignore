@@ -1,0 +1,7 @@
+web/log/*
+nginx/log/*
+db/data/*
+
+!.gitkeep
+
+__pycache__
