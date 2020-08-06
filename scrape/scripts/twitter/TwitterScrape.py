@@ -21,13 +21,9 @@ class TwitterScrape:
 
   def start_scrape(self):
 
-    tw_data = TweepyController().get_tweets_from_screen_names(Config.TWITTER_SCREEN_NAMES,3)
-
-    print(tw_data)
-
-    return 
+    tw_data = TweepyController().get_tweets_from_screen_names(Config.TWITTER_SCREEN_NAMES,6)
     if len(tw_data) == 0:
-      return 0, error_message
+      return 
     
     tw_data = self._data_shaping(tw_data)
     
@@ -81,7 +77,7 @@ class TwitterScrape:
       og_description = None
       
       try:
-        og_image, og_site_name, og_title, og_description = scraper.scrape(url)
+        url, og_site_name, og_title, og_description = scraper.scrape(url)
       except Exception as e:
         print(e)
         

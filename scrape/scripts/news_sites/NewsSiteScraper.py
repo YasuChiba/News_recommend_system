@@ -23,7 +23,7 @@ class NewsSiteScraper():
     options.add_argument("--no-sandbox")
     options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36')
 
-    self.selenium_driver = webdriver.Chrome("/root/scrape_script/lib/chromedriver", options=options)
+    self.selenium_driver = webdriver.Chrome("/root/scrape/lib/chromedriver", options=options)
     
   def __del__(self):
     self.selenium_driver.close()

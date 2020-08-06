@@ -16,9 +16,7 @@ class TwitterDBAccessor:
     
   def insertFromDataFrame(self, df: pd.DataFrame):
     error_message = ""
-    
-    seq_num = self.getLatestSequenceNumber() + 1
-    
+        
     for index, row in df.iterrows():
       tw_id=int(row["tw_id"])
       user_name=row["username"]
@@ -46,7 +44,7 @@ class TwitterDBAccessor:
   
   def isExistTweetID(self, tw_id: int) -> bool:
     
-    sql = "select * from twitter_data where tw_id = " + str(tw_id) + " limit 1"
+    sql = "select * from " +Config.DB_TWITTER_TABLE_NAME + " where tw_id = " + str(tw_id) + " limit 1"
     self.dba.cursor.execute(sql)
     val = self.dba.cursor.fetchone()
 

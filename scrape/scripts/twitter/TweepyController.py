@@ -63,7 +63,6 @@ class TweepyController:
                     since=since_str, \
                     until=until_str, \
                     tweet_mode='extended').items() 
-                print(tw)
                 for j in tw:
                         # ツイート内の改行を削除
                         status = str(j.full_text).replace("\n","")
