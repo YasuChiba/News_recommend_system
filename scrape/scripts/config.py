@@ -2,14 +2,14 @@
 
 class SystemConfig:
 
-  MYSQL_DATABASE = "scrape_data"
+  MYSQL_DATABASE = "scrape_database"
   MYSQL_PORT= 3306
   MYSQL_USER = "root"
   MYSQL_PASSWORD = "eq967yD5"
   MYSQL_HOST = "db"
   MYSQL_CHARSET = "utf8mb4"
   
-  DB_TWITTER_TABLE_NAME = "twitter_data"
+  DB_TWITTER_TABLE_NAME = "scrape_data"
 
   #requestsで使うヘッダー。UAを変えないとあかんサイトがあるので。
   REQUESTS_HEADER = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36"}
@@ -28,6 +28,8 @@ class SystemConfig:
   
   #このリストに含まれてるURLは中途半端に展開してたりrequestsで扱えないページのURL.
   PROHIBITED_URLS = ["cgi.tbs.co.jp"]
+
+  TWITTER_SCREEN_NAMES = ["nikkei"]
 
 
 Config = SystemConfig

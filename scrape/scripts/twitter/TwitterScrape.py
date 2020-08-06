@@ -19,12 +19,13 @@ class TwitterScrape:
     
     self.dba = TwitterDBAccessor()
 
-  #これを呼ぶ。ほかは外からは呼ばない
-  #Twitterスクレイプして、各サイトの中身もスクレイプして、DBに突っ込むところまでこれに含まれる
   def start_scrape(self):
 
-    tw_data = TweepyController().get_my_friends_tweet(3)
+    tw_data = TweepyController().get_tweets_from_screen_names(Config.TWITTER_SCREEN_NAMES,3)
 
+    print(tw_data)
+
+    return 
     if len(tw_data) == 0:
       return 0, error_message
     
@@ -40,7 +41,7 @@ class TwitterScrape:
 
     #DBへの挿入
     try:
-      inserted_record_num = self.dba.insertFromDataFrame(tw_data)
+      self.dba.insertFromDataFrame(tw_data)
       return 
       
     except Exception as e:
