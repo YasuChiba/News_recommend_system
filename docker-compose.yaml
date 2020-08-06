@@ -54,8 +54,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: eq967yD5
-      MYSQL_USER: docker
-      MYSQL_PASSWORD: V4uni863
+      BIND-ADDRESS: 0.0.0.0
       TZ: 'Asia/Tokyo'
       
     volumes:
