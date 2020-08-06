@@ -66,3 +66,17 @@ services:
       
     ports:
       - 3306:3306
+
+  scrape:
+    build:
+      context: .
+      dockerfile: ./scrape/build/Dockerfile
+    container_name: news_recommend_system_scrape
+    environment:
+      TZ: "Asia/Tokyo"
+    volumes:
+      - ./scrape:/root/scrape
+    working_dir: /root/scrape
+
+    #command: bash -c "/bin/start.sh" 
+
