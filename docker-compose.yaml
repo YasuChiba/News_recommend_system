@@ -8,12 +8,13 @@ services:
     container_name: news_recommend_system_web
 
     volumes:
-      - ./web:/root/web
+      - ./web:/webuser/web
     ports:
       - "3031:3031"
+      - "8080:8080"
     environment:
       TZ: "Asia/Tokyo"
-    working_dir: /root/web
+    working_dir: /webuser/web
     command: bash -c "/bin/start.sh"
 
   nginx:
