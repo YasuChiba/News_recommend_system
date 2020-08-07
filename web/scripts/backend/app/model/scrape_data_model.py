@@ -1,5 +1,7 @@
 from backend.database import db, ma
 from typing import List
+import datetime
+from pytz import timezone
 
 class ScrapeDataModel(db.Model):
     __tablename__ = 'scrape_data'
@@ -32,7 +34,19 @@ class ScrapeDataModel(db.Model):
       
       schema = ScrapeDataModelSchema(many=True)
       return schema.dump(val)
-        
+    
+    #hours前までのレコード
+    def getRecord(hours):
+      until = datetime.datetime.now().astimezone(timezone('Asia/Tokyo'))
+      since = until - datetime.timedelta(hours=hours)
+      until_str = until.strftime('%Y-%m-%d %H:%M:%S')
+      since_str = since.strftime('%Y-%m-%d %H:%M:%S')
+
+      sql = "select * from %s where created_at between '%s' and '%s'" % (ScrapeDataModel.__tablename__, since_str, until_str)
+      val = db.session.execute(sql)
+      
+      schema = ScrapeDataModelSchema(many=True)
+      return schema.dump(val)
 
 class ScrapeDataModelSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
