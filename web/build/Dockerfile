@@ -25,10 +25,10 @@ RUN chmod +x /bin/start.sh
 ENV PYTHONIOENCODING utf-8
 
 
-
 # 一般ユーザーアカウントを追加
 RUN useradd -m webuser
 # 一般ユーザーにsudo権限を付与
 RUN gpasswd -a webuser sudo
 # 一般ユーザーのパスワード設定
 RUN echo "webuser:passwd" | chpasswd
+
