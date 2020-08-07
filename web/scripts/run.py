@@ -18,13 +18,16 @@ app = create_app()
 def index(path):
     return render_template('index.html')
 
-@app.route("/test")
+@app.route("/api/test")
 def index2():
+    
     return "Hello testtetstteeee!!"
+
 
 
 @app.route("/test2")
 def index3():
     return "Hello 2222testtetstteeee!!"
+
 if __name__ == "__main__":
     app.run()
