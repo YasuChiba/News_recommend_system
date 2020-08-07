@@ -14,3 +14,10 @@ CREATE TABLE scrape_data (
   og_title TEXT,
   og_description TEXT
 );
+
+CREATE TABLE train_data(
+  scrape_id Int UNIQUE NOT NULL,
+  category Int NOT NULL,
+  FOREIGN KEY(scrape_id)
+  REFERENCES scrape_data(id)
+);
