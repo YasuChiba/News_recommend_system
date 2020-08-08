@@ -17,7 +17,14 @@ CREATE TABLE scrape_data (
 
 CREATE TABLE train_data(
   scrape_id Int UNIQUE NOT NULL,
-  category Int NOT NULL,
-  FOREIGN KEY(scrape_id)
-  REFERENCES scrape_data(id)
+  category_id Int NOT NULL,
+  FOREIGN KEY(scrape_id) REFERENCES scrape_data(id),
+  FOREIGN KEY(category_id) REFERENCES category_data(id)
+
+);
+
+
+CREATE TABLE category_data(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  category_name TEXT NOT NULL
 );
