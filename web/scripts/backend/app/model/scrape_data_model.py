@@ -47,7 +47,42 @@ class ScrapeDataModel(db.Model):
       
       schema = ScrapeDataModelSchema(many=True)
       return schema.dump(val)
+    
+    #dictのリストを返す
+    def getJoinedRecord(hours):
+      until = datetime.datetime.now().astimezone(timezone('Asia/Tokyo'))
+      since = until - datetime.timedelta(hours=hours)
+      until_str = until.strftime('%Y-%m-%d %H:%M:%S')
+      since_str = since.strftime('%Y-%m-%d %H:%M:%S')
+
+      sql = "SELECT scrape_data.*, GROUP_CONCAT(train_data.category_id) FROM scrape_data " + "LEFT JOIN train_data ON scrape_data.id = train_data.scrape_id where created_at between '%s' and '%s' GROUP by scrape_data.id;" % (since_str, until_str)
+
+      val = db.session.execute(sql)
+
+      result = []
+      for row in val:
+        d = dict(row)
+        d["categories"] = d.pop("GROUP_CONCAT(train_data.category_id)", None)
+        result.append(d)
+      
+      return result
+
 
 class ScrapeDataModelSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = ScrapeDataModel
+
+'''
+class ScrapeDataJoinedModelSchema(ma.SQLAlchemyAutoSchema):
+  id = ma.fields.Integer()
+  tw_id = ma.fields.Integer()
+  user_name = ma.fields.String()
+  created_at = ma.fields.Date()
+  text = ma.fields.String()
+  url = ma.fields.String()
+  og_site_name = ma.fields.String()
+  og_title = ma.fields.String()
+  og_description = ma.fields.String()
+
+  pass
+'''
