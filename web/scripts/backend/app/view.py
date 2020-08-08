@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, Blueprint, current_app, jsonify
+from flask import Flask, render_template, request, Blueprint, current_app, jsonify, json
 from .model.scrape_data_model import ScrapeDataModel
 from .model.category_data_model import CategoryDataModel
+from .model.train_data_model import TrainDataModel
 
 api_blueprint = Blueprint('api', __name__)
 
@@ -18,12 +19,11 @@ def test2():
   return jsonify(text), 200
 
 
-@api_blueprint.route('/test3',methods=['GET'])
-def test3():
+@api_blueprint.route('/news_data',methods=['GET'])
+def news_data():
   scrape_data = ScrapeDataModel.getJoinedRecord(10)
 
   categories = CategoryDataModel.getAllRecord()
-  print(categories.values())
 
   for data in scrape_data:
     _cat = data["categories"]
@@ -37,11 +37,50 @@ def test3():
         
     _categories_dic = {}
     for cat in categories.values():
-        _categories_dic[cat] = 1 if cat in _categories else 0
+        _categories_dic[cat] = True if cat in _categories else False
 
     data["categories"] = _categories_dic
 
-    
-    
-  
   return jsonify(scrape_data), 200
+
+
+@api_blueprint.route('/annotation', methods=['POST'])
+def annotation():
+    print("START ANNOTATIONNN")
+
+
+
+
+    print("CHARSET ", request.charset)
+    data = request.data
+    data = json.loads(data)
+
+
+
+    is_delete = data['is_delete']
+    scrape_id = data['scrape_id']
+    category = data['category']
+    print("IS DELETEEEEEEE  ", is_delete)
+    print("IS scrape_id  ", scrape_id)
+    print(type(category))
+    print("finish")
+
+    categories = CategoryDataModel.getAllRecord()
+
+    keys = [k for k, v in categories.items() if v == category]
+
+    if len(keys) != 1:
+        return "category is wrong", 400
+    category_id = keys[0]
+    print("IS category_id  ", category_id)
+
+    if is_delete == "true":
+        TrainDataModel.delete(scrape_id, category_id)
+        return "success", 200
+
+    elif is_delete == "false":
+        print("START INSERTTTT")
+        TrainDataModel.insert(scrape_id, category_id)
+        return "success", 200
+    
+    return "invalid", 400

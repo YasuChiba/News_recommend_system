@@ -12,9 +12,10 @@
         </template>
       </el-table-column>
       <el-table-column label="カテゴリ">
-        <template>
-            <el-checkbox v-model="checked1" label="Option1" border></el-checkbox>
-            <el-checkbox v-model="checked2" label="Option2" border></el-checkbox>
+        <template slot-scope="scope">
+          <div v-for="(item, key) in scope.row.categories" :key="key">
+            <el-checkbox v-model="scope.row.categories[key]" v-bind:label='key' v-on:change="checkUpdate(key, scope.row.id, scope.row.categories[key])" border size="mini"></el-checkbox>
+          </div>
         </template>
       </el-table-column>
 
@@ -29,7 +30,8 @@ export default {
   name: 'annotate',
   data () {
     return {
-      tableData: []
+      tableData: [],
+      checkboxGroup2: ['Option1', 'Option2']
     }
   },
   mounted () {
@@ -37,9 +39,24 @@ export default {
   },
   methods: {
     updateTableData: async function () {
-      const response = await axios.get('api/test2')
-      console.log(response)
+      const response = await axios.get('api/news_data')
       this.tableData = response.data
+      console.log(this.tableData[0].categories)
+    },
+    checkUpdate: function (category, scrapeId, val) {
+      console.log(category)
+      console.log(val)
+      console.log(scrapeId)
+      axios.post('api/annotation', {
+        is_delete: val ? 'false' : 'true',
+        scrape_id: scrapeId,
+        category: category
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          charset: 'utf-8'
+        }
+      })
     }
   }
 }
