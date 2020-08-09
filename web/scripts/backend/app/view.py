@@ -43,27 +43,40 @@ def news_data():
 
   return jsonify(scrape_data), 200
 
+@api_blueprint.route('/news_data/category',methods=['GET'])
+def news_data_category():
+    print(request.args)
+    category_id = request.args.get("category_id")
+    print("CATEGORY IDDDDD  ", category_id)
+
+    result = TrainDataModel.getRecordFromCategoryIDWithJoin(category_id, 20)
+
+    return jsonify(result), 200
+
+@api_blueprint.route('/categories',methods=['GET'])
+def categories():
+    categories = CategoryDataModel.getAllRecord()
+
+    result = []
+
+    for k in categories.keys():
+        tmp = {}
+        tmp["category_id"] = k
+        tmp["category_name"] = categories[k]
+        result.append(tmp)
+
+    return jsonify(result), 200
+
+
 
 @api_blueprint.route('/annotation', methods=['POST'])
 def annotation():
-    print("START ANNOTATIONNN")
-
-
-
-
-    print("CHARSET ", request.charset)
     data = request.data
     data = json.loads(data)
-
-
 
     is_delete = data['is_delete']
     scrape_id = data['scrape_id']
     category = data['category']
-    print("IS DELETEEEEEEE  ", is_delete)
-    print("IS scrape_id  ", scrape_id)
-    print(type(category))
-    print("finish")
 
     categories = CategoryDataModel.getAllRecord()
 
@@ -79,7 +92,6 @@ def annotation():
         return "success", 200
 
     elif is_delete == "false":
-        print("START INSERTTTT")
         TrainDataModel.insert(scrape_id, category_id)
         return "success", 200
     

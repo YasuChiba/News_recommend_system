@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="news">
     <h1>This is a annotating page</h1>
     <el-table class="data-table" :data="tableData" stripe>
       <el-table-column prop="id" label="ID" width="100"></el-table-column>

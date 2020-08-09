@@ -26,6 +26,17 @@ class ScrapeDataModel(db.Model):
         return 0
       else:
         return val["text"]
+
+    def getLatestPostedDate():
+      sql = "select * from %s where created_at=(select max(created_at) from %s)" % (ScrapeDataModel.__tablename__, ScrapeDataModel.__tablename__)
+      
+      val = db.session.execute(sql).first()
+      
+      if val == None:
+        return datetime.datetime.fromtimestamp(0)
+      return val["created_at"]
+      #return datetime.datetime.strptime(val["created_at"], '%Y-%m-%d %H:%M:%S')
+
     
     
     def getAllRecord():
@@ -37,7 +48,9 @@ class ScrapeDataModel(db.Model):
     
     #hours前までのレコード
     def getRecord(hours):
-      until = datetime.datetime.now().astimezone(timezone('Asia/Tokyo'))
+      #until = datetime.datetime.now().astimezone(timezone('Asia/Tokyo'))
+      until = ScrapeDataModel.getLatestPostedDate()
+
       since = until - datetime.timedelta(hours=hours)
       until_str = until.strftime('%Y-%m-%d %H:%M:%S')
       since_str = since.strftime('%Y-%m-%d %H:%M:%S')
@@ -50,10 +63,13 @@ class ScrapeDataModel(db.Model):
     
     #dictのリストを返す
     def getJoinedRecord(hours):
-      until = datetime.datetime.now().astimezone(timezone('Asia/Tokyo'))
+      #until = datetime.datetime.now().astimezone(timezone('Asia/Tokyo'))
+
+      until = ScrapeDataModel.getLatestPostedDate()
       since = until - datetime.timedelta(hours=hours)
       until_str = until.strftime('%Y-%m-%d %H:%M:%S')
       since_str = since.strftime('%Y-%m-%d %H:%M:%S')
+      print("UNITLLLLLLLLLLLL, ", until_str)
 
       sql = "SELECT scrape_data.*, GROUP_CONCAT(train_data.category_id) FROM scrape_data " + "LEFT JOIN train_data ON scrape_data.id = train_data.scrape_id where created_at between '%s' and '%s' GROUP by scrape_data.id;" % (since_str, until_str)
 
