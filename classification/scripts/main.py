@@ -3,12 +3,12 @@
 import MeCab
 from db_accessor import clsDbAccessor
 import fasttext as ft
-
+import subprocess
 
 mecab = MeCab.Tagger ("-Owakati")
 
 data_file_path = "/root/classification/tmp_data.txt"
-model_file_path = "/root/classification/tmp_model.bin"
+model_file_path = "/root/classification/tmp_model"
 
 def process_data_for_train():
     dba = clsDbAccessor()
@@ -39,10 +39,15 @@ def train():
     f = open(data_file_path, 'w',encoding="utf-8")
     for x in data:
         f.write(x + "\n")
-    model = ft.train_supervised(data_file_path, lr=0.05, epoch=2000, dim=200)
-    model.save_model(model_file_path)
+    #model = ft.train_supervised(data_file_path, lr=0.05, epoch=2000, dim=200)
+    cmd = "/tmp/fastText/fasttext supervised -input " + data_file_path + " -output " + model_file_path + " -epoch 2000 -dim 200"
+    classification_process = subprocess.Popen(cmd.split(), shell=False)    
+    while classification_process.poll() is None:
+        pass
 
-    return model
+    #model.save_model(model_file_path)
+
+    return None
 
 def predict(model = None):
     #tmp_text = "　「ただで土を入れて水田にしてあげる」。そんな言葉を信じたら1年後には高さ10メートルの建設残土の山が。県も市も警察も頼りにならず、撤去を求める裁判に勝訴したものの変わらない。自腹で撤去したら最低77…"
@@ -64,7 +69,7 @@ def predict(model = None):
 
 
     if model is None:
-        model = ft.load_model(model_file_path)
+        model = ft.load_model(model_file_path + ".bin")
     
     for i in range(len(data_list)):
         scrape_id = data_list[i][1]

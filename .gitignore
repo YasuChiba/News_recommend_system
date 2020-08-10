@@ -23,3 +23,4 @@ yarn-error.log*
 !.gitkeep
 classification/tmp_data.txt
 classification/tmp_model.bin
+classification/tmp_model.vec
