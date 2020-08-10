@@ -13,6 +13,9 @@ RUN apt-get install -y google-chrome-stable=84.0.4147.105-1
 COPY ./scrape/requirements.txt /tmp
 RUN pip3 install -r /tmp/requirements.txt
 
+#cronの設定ファイル
+COPY ./scrape/build/cron_scrape /etc/cron.d
+RUN chmod 644 /etc/cron.d/cron_scrape
 
 #これを設定しないPythonで日本語を扱えない
 ENV PYTHONIOENCODING utf-8

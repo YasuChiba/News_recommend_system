@@ -2,11 +2,12 @@
   <div class="news">
     <h1>Annotating Page</h1>
     <el-table class="data-table" :data="tableData" stripe>
-      <el-table-column prop="id" label="ID" width="100"></el-table-column>
-      <el-table-column prop="og_site_name" label="サイト名" width="140"></el-table-column>
+      <el-table-column prop="id" label="ID" width="80"></el-table-column>
+      <el-table-column prop="created_at" label="Posted Date"></el-table-column>
+      <el-table-column prop="og_site_name" label="サイト名"></el-table-column>
       <el-table-column prop="og_title" label="Title"></el-table-column>
       <el-table-column prop="og_description" label="text"></el-table-column>
-      <el-table-column label="URL">
+      <el-table-column label="URL"  width="80">
         <template slot-scope="scope">
             <el-link :href="scope.row.url" target="_blank">link</el-link>
         </template>

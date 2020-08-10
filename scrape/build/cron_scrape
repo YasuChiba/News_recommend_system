@@ -1,0 +1,7 @@
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+MAILTO=root
+HOME=/
+PYTHONIOENCODING=utf-8
+
+0 */1 * * * root /usr/bin/python3 /root/scrape/scripts/main.py

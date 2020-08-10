@@ -12,6 +12,7 @@
         </div>
         <el-table class="data-table" :data="news_by_categories[item.category_id]" stripe>
             <el-table-column prop="id" label="ID" width="100"></el-table-column>
+            <el-table-column prop="created_at" label="Posted Date"></el-table-column>
             <el-table-column prop="og_site_name" label="サイト名" width="140"></el-table-column>
             <el-table-column prop="og_title" label="Title"></el-table-column>
             <el-table-column prop="og_description" label="text"></el-table-column>

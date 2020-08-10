@@ -84,5 +84,5 @@ services:
     working_dir: /root/scrape
     tty: true
     #command: bash -c "/bin/start.sh" 
-    command: bash
+    command: bash -c "cron -f" 
 
