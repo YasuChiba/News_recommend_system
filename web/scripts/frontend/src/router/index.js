@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import About from '../views/About.vue'
 import Annotating from '../views/Annotating.vue'
-import News from '../views/News.vue'
+import AnnotatedNews from '../views/AnnotatedNews.vue'
+import PredictedNews from '../views/PredictedNews.vue'
 
 Vue.use(VueRouter)
 
@@ -14,19 +14,19 @@ const routes = [
     component: Home
   },
   {
-    path: '/about',
-    name: 'about',
-    component: About
-  },
-  {
     path: '/annotate',
     name: 'annotate',
     component: Annotating
   },
   {
-    path: '/news',
-    name: 'news',
-    component: News
+    path: '/annotated_news',
+    name: 'annotated_news',
+    component: AnnotatedNews
+  },
+  {
+    path: '/predicted_news',
+    name: 'predicted_news',
+    component: PredictedNews
   }
 ]
 

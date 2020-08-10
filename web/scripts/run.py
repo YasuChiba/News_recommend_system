@@ -3,7 +3,6 @@ from backend.app.view import api_blueprint
 from backend.database import db, ma
 from backend.config import Config
 
-
 def create_app():
 
     app = Flask(__name__, static_folder='./frontend/dist/static', template_folder='./frontend/dist')
@@ -26,7 +25,6 @@ def index(path):
 def index2():
     
     return "Hello testtetstteeee!!"
-
 
 
 @app.route("/test2")

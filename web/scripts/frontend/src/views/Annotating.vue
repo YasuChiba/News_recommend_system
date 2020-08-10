@@ -40,7 +40,7 @@ export default {
   methods: {
     updateTableData: async function () {
       const response = await axios.get('api/news_data')
-      this.tableData = response.data
+      this.tableData = response.data.reverse()
       console.log(this.tableData[0].categories)
     },
     checkUpdate: function (category, scrapeId, val) {

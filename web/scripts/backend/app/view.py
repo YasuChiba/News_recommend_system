@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, Blueprint, current_app, jsoni
 from .model.scrape_data_model import ScrapeDataModel
 from .model.category_data_model import CategoryDataModel
 from .model.train_data_model import TrainDataModel
+from .model.predicted_data_model import PredictedDataModel
 
 api_blueprint = Blueprint('api', __name__)
 
@@ -21,7 +22,7 @@ def test2():
 
 @api_blueprint.route('/news_data',methods=['GET'])
 def news_data():
-  scrape_data = ScrapeDataModel.getJoinedRecord(10)
+  scrape_data = ScrapeDataModel.getJoinedRecord(1000)
 
   categories = CategoryDataModel.getAllRecord()
 
@@ -43,15 +44,25 @@ def news_data():
 
   return jsonify(scrape_data), 200
 
-@api_blueprint.route('/news_data/category',methods=['GET'])
-def news_data_category():
+@api_blueprint.route('/news_data/annotated_category',methods=['GET'])
+def annotated_news_data_category():
     print(request.args)
     category_id = request.args.get("category_id")
-    print("CATEGORY IDDDDD  ", category_id)
 
-    result = TrainDataModel.getRecordFromCategoryIDWithJoin(category_id, 20)
+    result = TrainDataModel.getRecordFromCategoryIDWithJoin(category_id, 1000)
 
     return jsonify(result), 200
+
+
+@api_blueprint.route('/news_data/predicted_category',methods=['GET'])
+def predicted_news_data_category():
+    category_id = request.args.get("category_id")
+    min_scrape_id = request.args.get("min_scrape_id")
+
+    result = PredictedDataModel.getRecordFromCategoryIDWithJoin(category_id, min_scrape_id)
+
+    return jsonify(result), 200
+
 
 @api_blueprint.route('/categories',methods=['GET'])
 def categories():
@@ -64,6 +75,7 @@ def categories():
         tmp["category_id"] = k
         tmp["category_name"] = categories[k]
         result.append(tmp)
+
 
     return jsonify(result), 200
 

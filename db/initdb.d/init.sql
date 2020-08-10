@@ -29,3 +29,15 @@ CREATE TABLE category_data(
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   category_name TEXT NOT NULL
 );
+
+
+
+CREATE TABLE predicted_data(
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  scrape_id INT NOT NULL,
+  category_id Int NOT NULL,
+  probability FLOAT NOT NULL, 
+  UNIQUE (scrape_id, category_id),
+  FOREIGN KEY(scrape_id) REFERENCES scrape_data(id),
+  FOREIGN KEY(category_id) REFERENCES category_data(id)
+);

@@ -102,5 +102,22 @@ class clsDbAccessor():
 			d["categories"] = d.pop("GROUP_CONCAT(train_data.category_id)", None).split(",")
 			result.append(d)
       	
+		return result
+	
+	def get_scrape_data(self):
+		sql = "select id, text, og_description from scrape_data order by id DESC LIMIT 1000"
+		self.cursor.execute(sql)
+		_result = self.cursor.fetchall()
+		
+		result = []
+
+		for row in _result:
+			d = dict(row)
+			result.append(d)
 		
 		return result
+
+	def insert_predicted_data(self,scrape_id, category_id, probability):
+		sql = "REPLACE into predicted_data (scrape_id, category_id, probability) VALUES(%s, %s, %s)"
+		val = self.cursor.execute(sql, (scrape_id, category_id, probability))
+		self.commit()
