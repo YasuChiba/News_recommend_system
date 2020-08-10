@@ -29,7 +29,7 @@ class SystemConfig:
   #このリストに含まれてるURLは中途半端に展開してたりrequestsで扱えないページのURL.
   PROHIBITED_URLS = ["cgi.tbs.co.jp"]
 
-  TWITTER_SCREEN_NAMES = ["nikkei","asahi"]
+  TWITTER_SCREEN_NAMES = ["nikkei","asahi", "jptechcrunch"]
 
 
 Config = SystemConfig
