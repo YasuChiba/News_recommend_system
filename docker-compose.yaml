@@ -50,10 +50,8 @@ services:
     volumes:
       - ./classification:/root/classification
     working_dir: /root/classification
-
-    tty: true
-    #command: bash -c "/bin/start.sh" 
-    command: bash
+    restart: always
+    command: bash -c "python3 /root/classification/scripts/flask-server.py" 
 
   db:
     image: mysql:5.7

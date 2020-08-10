@@ -1,6 +1,9 @@
 <template>
   <div class="predicted_news">
     <h1>Predicted News List</h1>
+    <el-button type="primary" v-on:click="startPrediction">予測開始</el-button>
+    <br>
+    <br>
     <div v-for="item in categories" :key="item.category_id">
         <div>
             <h2>
@@ -27,6 +30,12 @@
         <br>
         <br>
     </div>
+    <div id="overlay" v-show="showPopUp">
+        <div id="content">
+          <p>文書分類してます。数分後にリロードしてみてね</p>
+          <el-button type="primary" v-on:click="closeModal" size="small">Close</el-button>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -40,7 +49,8 @@ export default {
       categories: [],
       news_by_categories: {},
       is_loading_by_categories: {},
-      is_desabled_by_categories: {}
+      is_desabled_by_categories: {},
+      showPopUp: false
     }
   },
   mounted () {
@@ -75,6 +85,16 @@ export default {
       var tmparray = this.news_by_categories[categoryId].concat(res.data)
       this.$set(this.news_by_categories, categoryId, tmparray)
       this.$set(this.is_loading_by_categories, categoryId, false)
+    },
+    startPrediction: async function () {
+      this.openModal()
+      await axios.get('api/start_processing')
+    },
+    openModal: function () {
+      this.showPopUp = true
+    },
+    closeModal: function () {
+      this.showPopUp = false
     }
   }
 }
@@ -88,5 +108,23 @@ export default {
 .categor-title {
   font-weight:bold;
   font-size: 30px;
+}
+#overlay{
+  z-index:1;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color:rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#content{
+  z-index:2;
+  width:50%;
+  padding: 1em;
+  background:#fff;
 }
 </style>

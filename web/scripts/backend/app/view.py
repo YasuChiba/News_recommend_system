@@ -4,6 +4,8 @@ from .model.category_data_model import CategoryDataModel
 from .model.train_data_model import TrainDataModel
 from .model.predicted_data_model import PredictedDataModel
 
+import requests
+
 api_blueprint = Blueprint('api', __name__)
 
 @api_blueprint.route('/test',methods=['GET'])
@@ -140,3 +142,9 @@ def annotation():
         return "success", 200
     
     return "invalid", 400
+
+
+@api_blueprint.route('/start_processing',methods=['GET'])
+def start_processing():
+    res = requests.get("http://classification:8000/train_and_predict")
+    return "processing", 200

@@ -76,7 +76,9 @@ def predict(model = None):
                 probability = round(res[1][j],3)
                 dba.insert_predicted_data(scrape_id, category_id, probability)
 
-    
-if __name__ == '__main__':
+def start():
     model = train()
     predict(model = model)
+
+if __name__ == '__main__':
+    start()
