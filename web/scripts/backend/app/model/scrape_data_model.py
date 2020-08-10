@@ -62,17 +62,17 @@ class ScrapeDataModel(db.Model):
       return schema.dump(val)
     
     #dictのリストを返す
-    def getJoinedRecord(hours):
-      #until = datetime.datetime.now().astimezone(timezone('Asia/Tokyo'))
+    def getJoinedRecord(min_scrape_id):
+      
+      sql = "SELECT scrape_data.*, GROUP_CONCAT(train_data.category_id) FROM scrape_data  LEFT JOIN train_data ON scrape_data.id = train_data.scrape_id "
+      if min_scrape_id is None:
+        pass
+      else:
+        sql += "where scrape_data.id < %s " % (min_scrape_id)
 
-      until = ScrapeDataModel.getLatestPostedDate()
-      since = until - datetime.timedelta(hours=hours)
-      until_str = until.strftime('%Y-%m-%d %H:%M:%S')
-      since_str = since.strftime('%Y-%m-%d %H:%M:%S')
-      print("UNITLLLLLLLLLLLL, ", until_str)
+      sql += "GROUP by scrape_data.id ORDER by scrape_data.id DESC LIMIT 30"
 
-      sql = "SELECT scrape_data.*, GROUP_CONCAT(train_data.category_id) FROM scrape_data " + "LEFT JOIN train_data ON scrape_data.id = train_data.scrape_id where created_at between '%s' and '%s' GROUP by scrape_data.id;" % (since_str, until_str)
-
+      print(sql)
       val = db.session.execute(sql)
 
       result = []

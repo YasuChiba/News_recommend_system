@@ -1,6 +1,6 @@
 <template>
   <div class="news">
-    <h1>This is a annotating page</h1>
+    <h1>Annotating Page</h1>
     <el-table class="data-table" :data="tableData" stripe>
       <el-table-column prop="id" label="ID" width="100"></el-table-column>
       <el-table-column prop="og_site_name" label="サイト名" width="140"></el-table-column>
@@ -14,12 +14,16 @@
       <el-table-column label="カテゴリ">
         <template slot-scope="scope">
           <div v-for="(item, key) in scope.row.categories" :key="key">
-            <el-checkbox v-model="scope.row.categories[key]" v-bind:label='key' v-on:change="checkUpdate(key, scope.row.id, scope.row.categories[key])" border size="mini"></el-checkbox>
+            <el-checkbox v-model="scope.row.categories[key]" v-bind:label='key' v-on:change="checkUpdated(key, scope.row.id, scope.row.categories[key])" border size="mini"></el-checkbox>
           </div>
         </template>
       </el-table-column>
-
     </el-table>
+    <br>
+    <el-button type="primary" plain size="small" :loading="is_loading" :disabled="is_desabled" v-on:click="onClickLoadButton()">
+          {{ is_loading ? 'Loading' : 'More' }}
+    </el-button>
+    <br>
   </div>
 </template>
 
@@ -31,7 +35,8 @@ export default {
   data () {
     return {
       tableData: [],
-      checkboxGroup2: ['Option1', 'Option2']
+      is_loading: false,
+      is_desabled: false
     }
   },
   mounted () {
@@ -40,10 +45,9 @@ export default {
   methods: {
     updateTableData: async function () {
       const response = await axios.get('api/news_data')
-      this.tableData = response.data.reverse()
-      console.log(this.tableData[0].categories)
+      this.tableData = response.data
     },
-    checkUpdate: function (category, scrapeId, val) {
+    checkUpdated: function (category, scrapeId, val) {
       console.log(category)
       console.log(val)
       console.log(scrapeId)
@@ -57,6 +61,18 @@ export default {
           charset: 'utf-8'
         }
       })
+    },
+    onClickLoadButton: async function () {
+      this.is_loading = true
+
+      const minScrapeId = this.tableData[this.tableData.length - 1].id
+      var res = await axios.get('api/news_data?min_scrape_id=' + String(minScrapeId))
+
+      if (res.data.length === 0) {
+        this.is_desabled = true
+      }
+      this.tableData = this.tableData.concat(res.data)
+      this.is_loading = false
     }
   }
 }

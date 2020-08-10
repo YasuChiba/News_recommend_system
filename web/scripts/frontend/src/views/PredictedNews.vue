@@ -1,6 +1,6 @@
 <template>
   <div class="predicted_news">
-    <h1>News List</h1>
+    <h1>Predicted News List</h1>
     <div v-for="item in categories" :key="item.category_id">
         <div>
             <h2>
@@ -12,10 +12,15 @@
             <el-table-column prop="og_site_name" label="サイト名" width="140"></el-table-column>
             <el-table-column prop="og_title" label="Title"></el-table-column>
             <el-table-column prop="og_description" label="text"></el-table-column>
+            <el-table-column label="URL">
+              <template slot-scope="scope">
+                <el-link :href="scope.row.url" target="_blank">link</el-link>
+              </template>
+            </el-table-column>
             <el-table-column prop="probability" label="Probability"></el-table-column>
         </el-table>
         <br>
-        <el-button type="primary" plain size="small" :loading="is_loading_by_categories[item.category_id]"  v-on:click="onClickLoadButton(item.category_id)">
+        <el-button type="primary" plain size="small" :loading="is_loading_by_categories[item.category_id]" :disabled="is_desabled_by_categories[item.category_id]" v-on:click="onClickLoadButton(item.category_id)">
           {{ is_loading_by_categories[item.category_id] ? 'Loading' : 'More' }}
         </el-button>
         <br>
@@ -34,7 +39,8 @@ export default {
     return {
       categories: [],
       news_by_categories: {},
-      is_loading_by_categories: {}
+      is_loading_by_categories: {},
+      is_desabled_by_categories: {}
     }
   },
   mounted () {
@@ -48,6 +54,7 @@ export default {
       for (var cat in this.categories) {
         var t = this.categories[cat]
         this.$set(this.is_loading_by_categories, t.category_id, false)
+        this.$set(this.is_desabled_by_categories, t.category_id, false)
       }
 
       for (var key in this.categories) {
@@ -62,6 +69,9 @@ export default {
       const minScrapeId = this.news_by_categories[categoryId][this.news_by_categories[categoryId].length - 1].id
       var res = await axios.get('api/news_data/predicted_category?category_id=' + categoryId + '&min_scrape_id=' + String(minScrapeId))
 
+      if (res.data.length === 0) {
+        this.$set(this.is_desabled_by_categories, categoryId, true)
+      }
       var tmparray = this.news_by_categories[categoryId].concat(res.data)
       this.$set(this.news_by_categories, categoryId, tmparray)
       this.$set(this.is_loading_by_categories, categoryId, false)

@@ -30,16 +30,26 @@ class TrainDataModel(db.Model):
 
 
 
-    def getRecordFromCategoryIDWithJoin(category_id, hours):
+    def getRecordFromCategoryIDWithJoin(category_id, min_scrape_id):
 
-        until = ScrapeDataModel.getLatestPostedDate()
-        since = until - datetime.timedelta(hours=hours)
-        until_str = until.strftime('%Y-%m-%d %H:%M:%S')
-        since_str = since.strftime('%Y-%m-%d %H:%M:%S')
+       
 
 
-        sql = "select scrape_data.*, train_data.category_id from train_data join scrape_data on train_data.scrape_id = scrape_data.id " \
-        "where scrape_data.created_at between '%s' and '%s' and train_data.category_id = %s" % (since_str, until_str, category_id)
+        #sql = "select scrape_data.*, train_data.category_id from train_data join scrape_data on train_data.scrape_id = scrape_data.id " \
+        #"where scrape_data.created_at between '%s' and '%s' and train_data.category_id = %s" % (since_str, until_str, category_id)
+
+
+
+        sql = "select scrape_data.*, train_data.category_id from train_data join scrape_data on train_data.scrape_id = scrape_data.id " 
+
+        if min_scrape_id is not None:
+            sql += "where scrape_data.id < %s and " % (min_scrape_id)
+        else:
+            sql += "where "
+
+        sql += "train_data.category_id = %s order by scrape_data.id DESC LIMIT 5" % (category_id)
+
+
 
         print(sql)
         val = db.session.execute(sql)

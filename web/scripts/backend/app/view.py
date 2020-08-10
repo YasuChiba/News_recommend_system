@@ -22,7 +22,8 @@ def test2():
 
 @api_blueprint.route('/news_data',methods=['GET'])
 def news_data():
-  scrape_data = ScrapeDataModel.getJoinedRecord(1000)
+  min_scrape_id = request.args.get("min_scrape_id")
+  scrape_data = ScrapeDataModel.getJoinedRecord(min_scrape_id)
 
   categories = CategoryDataModel.getAllRecord()
 
@@ -46,10 +47,10 @@ def news_data():
 
 @api_blueprint.route('/news_data/annotated_category',methods=['GET'])
 def annotated_news_data_category():
-    print(request.args)
     category_id = request.args.get("category_id")
+    min_scrape_id = request.args.get("min_scrape_id")
 
-    result = TrainDataModel.getRecordFromCategoryIDWithJoin(category_id, 1000)
+    result = TrainDataModel.getRecordFromCategoryIDWithJoin(category_id, min_scrape_id)
 
     return jsonify(result), 200
 
