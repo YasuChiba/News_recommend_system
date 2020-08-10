@@ -35,7 +35,7 @@ services:
       TZ: "Asia/Tokyo"
       LANG: "ja_JP.UTF-8"
       BASIC_AUTH_USER_NAME: "root"
-      BASIC_AUTH_PASSWD: "root"
+      BASIC_AUTH_PASSWD: "eq967yD5"
     command: bash -c "/bin/basic_auth_setup.sh && nginx -c /etc/nginx/nginx.conf"
 
   classification:
