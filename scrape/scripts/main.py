@@ -21,7 +21,13 @@ def main():
 if __name__ == '__main__':
   print("===============================================================")
   print("===============================================================")
-  print("scrape start at (UTC)",datetime.datetime.now())
+  text = "scrape start at (UTC)" + str(datetime.datetime.now())
+  with open('/root/scrape/logfile.log', 'a') as f:
+    print(text, file=f)
+  print(text)
   main()
 
-  print("scrape finish at (UTC)",datetime.datetime.now())
+  text = "scrape finish at (UTC)" + str(datetime.datetime.now())
+  with open('/root/scrape/logfile.log', 'a') as f:
+    print(text, file=f)
+  print(text)
