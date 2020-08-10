@@ -21,3 +21,19 @@ class CategoryDataModel(db.Model):
       
       return result
 
+    def insert(category_name):
+        sql = "insert into category_data (category_name) values ('%s')" % (category_name)
+        db.session.execute(sql)
+        db.session.commit()
+    
+    def delete(category_id):
+      sql = "delete from predicted_data where category_id = %s" % (category_id)
+      db.session.execute(sql)
+
+      sql = "delete from train_data where category_id = %s" % (category_id)
+      db.session.execute(sql)
+
+      sql = "delete from category_data where id = %s" % (category_id)
+      db.session.execute(sql)
+
+      db.session.commit()

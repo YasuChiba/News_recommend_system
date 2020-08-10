@@ -80,6 +80,37 @@ def categories():
 
     return jsonify(result), 200
 
+@api_blueprint.route('/add_cateogry',methods=['GET'])
+def add_category():
+    category_name = request.args.get("category_name")
+    CategoryDataModel.insert(category_name)
+
+    categories = CategoryDataModel.getAllRecord()
+    result = []
+
+    for k in categories.keys():
+        tmp = {}
+        tmp["category_id"] = k
+        tmp["category_name"] = categories[k]
+        result.append(tmp)
+
+    return jsonify(result), 200
+
+@api_blueprint.route('/delete_cateogry',methods=['GET'])
+def delete_category():
+    category_id = request.args.get("category_id")
+    CategoryDataModel.delete(category_id)
+    categories = CategoryDataModel.getAllRecord()
+    result = []
+
+    for k in categories.keys():
+        tmp = {}
+        tmp["category_id"] = k
+        tmp["category_name"] = categories[k]
+        result.append(tmp)
+
+    return jsonify(result), 200
+
 
 
 @api_blueprint.route('/annotation', methods=['POST'])
